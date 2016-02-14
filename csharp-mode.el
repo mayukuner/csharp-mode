@@ -2010,30 +2010,6 @@ to the beginning of the prior namespace.
 ;; ==================================================================
 ;;; imenu stuff
 
-;;
-;; I used this to examine the performance of the imenu scanning.
-;; It's not necessary during normal operation.
-;;
-;; (defun csharp-imenu-begin-profile ()
-;;   "turn on profiling"
-;;   (interactive)
-;;   (let ((fns '(csharp--on-class-open-curly-p
-;;              csharp--on-namespace-open-curly-p
-;;              csharp--on-ctor-open-curly-p
-;;              csharp--on-enum-open-curly-p
-;;              csharp--on-intf-open-curly-p
-;;              csharp--on-prop-open-curly-p
-;;              csharp--on-indexer-open-curly-p
-;;              csharp--on-defun-open-curly-p
-;;              csharp--imenu-create-index-helper
-;;              looking-back
-;;              looking-at)))
-;;     (if (fboundp 'elp-reset-all)
-;;         (elp-reset-all))
-;;     (mapc 'elp-instrument-function fns)))
-
-
-
 (defun csharp--imenu-remove-param-names-from-paramlist (s)
   "The input string S is a parameter list, of the form seen in a
 C# method.  TYPE1 NAME1 [, TYPE2 NAME2 ...]
