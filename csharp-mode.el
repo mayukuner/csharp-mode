@@ -2010,51 +2010,6 @@ to the beginning of the prior namespace.
 ;; ==================================================================
 ;;; imenu stuff
 
-;; define some advice for menu construction.
-
-;; The way imenu constructs menus from the index alist, in
-;; `imenu--split-menu', is ... ah ... perplexing.  If the csharp
-;; create-index fn returns an ordered menu, and the imenu "sort" fn has
-;; been set to nil, imenu still sorts the menu, according to the rule
-;; that all submenus must appear at the top of any menu. Why?  I don't
-;; know. This advice disables that weirdness in C# buffers.
-
-(defadvice imenu--split-menu (around
-                              csharp--imenu-split-menu-patch
-                              activate compile)
-  ;; This advice will run in all buffers.  Let's may sure we
-  ;; actually execute the important bits only when a C# buffer is active.
-  (if (and (string-match "\\.[Cc][Ss]$"  (file-relative-name buffer-file-name))
-           (boundp 'csharp-want-imenu)
-           csharp-want-imenu)
-      (let ((menulist (copy-sequence menulist))
-            keep-at-top)
-        (if (memq imenu--rescan-item menulist)
-            (setq keep-at-top (list imenu--rescan-item)
-                  menulist (delq imenu--rescan-item menulist)))
-        ;; This is the part from the original imenu code
-        ;; that puts submenus at the top.  huh? why?
-        ;; --------------------------------------------
-        ;; (setq tail menulist)
-        ;; (dolist (item tail)
-        ;;   (when (imenu--subalist-p item)
-        ;;     (push item keep-at-top)
-        ;;     (setq menulist (delq item menulist))))
-        (if imenu-sort-function
-            (setq menulist (sort menulist imenu-sort-function)))
-        (if (> (length menulist) imenu-max-items)
-            (setq menulist
-                  (mapcar
-                   (lambda (menu)
-                     (cons (format "From: %s" (caar menu)) menu))
-                   (imenu--split menulist imenu-max-items))))
-        (setq ad-return-value
-              (cons title
-                    (nconc (nreverse keep-at-top) menulist))))
-    ;; else
-    ad-do-it))
-
-
 ;;
 ;; I used this to examine the performance of the imenu scanning.
 ;; It's not necessary during normal operation.
