@@ -2465,19 +2465,11 @@ more open-curlies are found.
 
 (defun csharp-imenu-create-index ()
   "Create an imenu index for the current C# buffer. "
-  ;; I think widen/narrow causes the buffer to be marked as
-  ;; modified. This is a bit surprising, but I have no other
-  ;; explanation for the source of the problem.
-  ;; So I use `c-save-buffer-state' so that the buffer is not
-  ;; marked modified when the scan completes.
-
-  ;; TODO: verify the above claim
-  (c-save-buffer-state ()
-    (save-excursion
-      (save-restriction
-        (widen)
-        (goto-char (point-min))
-        (csharp--imenu-create-index-helper nil "" t t)))))
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (csharp--imenu-create-index-helper nil "" t t))))
 
 
 ;; ==================================================================
