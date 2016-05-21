@@ -51,6 +51,7 @@
                         ))
 
 (ert-deftest fontification-of-literals-allows-multi-line-strings ()
+  (require 'assess)
   (should (assess-face-at=
            "string Literal = \"multi-line\nstring\";"
            'csharp-mode
@@ -68,6 +69,7 @@
   ;; this replaces the manual test of
   ;; test-files/fontification-test-compiler-directives.cs, but file
   ;; has been kept around to assist manual testing/verification.
+  (require 'assess)
   (assess-face-in-text=
    "#region test\nbool bar = true;"
    ;; should not be interpreted as string because of trailing \!
@@ -92,6 +94,7 @@
   ;; this replaces the manual test of
   ;; test-files/fontification-test-compiler-directives-with-comments.cs, but file
   ;; has been kept around to assist manual testing/verification.
+  (require 'assess)
   (let* ((test-string "#region case 1\n\n//this is a comment\n#region case2"))
     (should (assess-face-at=
              test-string
