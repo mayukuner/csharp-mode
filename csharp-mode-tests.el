@@ -5,12 +5,29 @@
 (require 'package)
 
 ;; development only packages, not declared as a package-dependency
-(package-initialize)
+(setq csharp-test-packages '(assess))
+
+;; ensure development packages are installed.
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(dolist (p '(assess))
-  (when (not (package-installed-p p))
+(package-initialize)
+
+(defun csharp-test-packages-installed-p ()
+  "Return nil if there are packages that are not installed."
+  (loop for p in csharp-test-packages
+        when (not (package-installed-p p)) do (return nil)
+        finally (return t)))
+
+(defun csharp-test-packages-install-packages ()
+  "Install missing packages."
+  (unless (csharp-test-packages-installed-p)
+    ;; Referesh package lists
     (package-refresh-contents)
-    (package-install p)))
+    ;; Install missing
+    (dolist (p csharp-test-packages)
+      (when (not (package-installed-p p))
+        (ignore-errors
+          (package-install p))))))
+(csharp-test-packages-install-packages)
 
 ;;; test-helper functions
 
